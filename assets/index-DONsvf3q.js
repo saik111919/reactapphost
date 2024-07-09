@@ -8995,7 +8995,7 @@ ec(), (es.exports = ge);
 var Td = es.exports,
   Bi = Td;
 (Ql.createRoot = Bi.createRoot), (Ql.hydrateRoot = Bi.hydrateRoot);
-const Rd = "/react-CHdo91hT.svg",
+const Rd = "./react-CHdo91hT.svg",
   Od = "./vite.svg";
 function Md() {
   const [e, n] = el.useState(0);
