@@ -1,12 +1,12 @@
-import { Home } from "@mui/icons-material";
 import ExpenseTraker from "../Pages/ExpenseTraker";
 import Login from "../Authentication/Login";
+import Home from "../Pages/Home";
 
 export default function routes() {
   const routes = [
     {
       id: 1,
-      path: "/reactapphost/",
+      path: "/",
       Component: Home,
       name: "Home",
       isProtected: true,
@@ -15,7 +15,7 @@ export default function routes() {
     },
     {
       id: 2,
-      path: "/reactapphost/expense",
+      path: "/expense",
       Component: ExpenseTraker,
       name: "Expense Traker",
       isProtected: true,
@@ -24,7 +24,7 @@ export default function routes() {
     },
     {
       id: 2,
-      path: "/reactapphost/login",
+      path: "/login",
       Component: Login,
       name: "Login",
       isProtected: false,

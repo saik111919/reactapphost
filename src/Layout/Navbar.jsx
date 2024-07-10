@@ -48,7 +48,7 @@ const Navbar = () => {
         </div>
       </nav>
 
-      <main>
+      <main className='page'>
         <Outlet />
       </main>
     </>

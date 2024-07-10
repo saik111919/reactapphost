@@ -3,6 +3,7 @@ import "./App.css";
 import Navbar from "./Layout/Navbar";
 import routes from "./routes/routes";
 import Protect from "./Authentication/Protect";
+import NoPage from "./Utils/NoPage";
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
               )
           )}
         </Route>
+        <Route path='*' element={<NoPage />} />
         {routes().map(
           (route) =>
             !route.isNav && (

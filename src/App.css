@@ -1,0 +1,10 @@
+.page {
+  max-height: calc(100dvh - 56.4px);
+  overflow-x: hidden;
+  overflow-y: auto;
+  padding: 0.25rem 0.3rem;
+}
+
+.navbar-toggler:focus {
+  box-shadow: none !important;
+}

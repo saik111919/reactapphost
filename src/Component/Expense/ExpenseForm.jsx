@@ -7,9 +7,12 @@ import {
   AccordionSummary,
   Paper,
   Typography,
+  TextField,
+  MenuItem,
+  Button,
+  Grid,
 } from "@mui/material";
-import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
-import { Button } from "bootstrap";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 const ExpenseForm = ({ onAddExpense, getData }) => {
   const {
@@ -38,89 +41,75 @@ const ExpenseForm = ({ onAddExpense, getData }) => {
   };
 
   return (
-    <Paper elevation={12}>
-      <Accordion className='mt-3 mb-1 shadow-sm '>
+    <Paper elevation={12} sx={{ mt: 3, mb: 1, p: 2 }}>
+      <Accordion>
         <AccordionSummary
-          expandIcon={<ArrowDownwardIcon />}
+          expandIcon={<ExpandMoreIcon />}
           aria-controls='panel1-content'
           id='panel1-header'
-          onClick={() => reset()}
         >
-          <Typography>Add Expenses</Typography>
+          <Typography variant='h6'>Add Expenses</Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <form onSubmit={handleSubmit(onSubmit)} className='container mt-4'>
-            <div className='row'>
-              <div className='col-md-6'>
-                <div className='mb-3'>
-                  <label className='form-label'>Title</label>
-                  <input
-                    type='text'
-                    className={`form-control ${
-                      errors.title ? "is-invalid" : ""
-                    }`}
-                    placeholder='Tile'
-                    {...register("title", { required: "Title is required" })}
-                  />
-                  {errors.title && (
-                    <div className='invalid-feedback'>
-                      {errors.title.message}
-                    </div>
-                  )}
-                </div>
-              </div>
-              <div className='col-md-6'>
-                <div className='mb-3'>
-                  <label className='form-label'>Amount</label>
-                  <input
-                    type='number'
-                    className={`form-control ${
-                      errors.amount ? "is-invalid" : ""
-                    }`}
-                    placeholder='Number'
-                    {...register("amount", {
-                      required: "Amount is required",
-                      valueAsNumber: true,
-                      validate: (value) =>
-                        value > 0 || "Amount must be greater than 0",
-                    })}
-                  />
-                  {errors.amount && (
-                    <div className='invalid-feedback'>
-                      {errors.amount.message}
-                    </div>
-                  )}
-                </div>
-              </div>
-              <div className='col-md-6'>
-                <div className='mb-3'>
-                  <label className='form-label'>Type</label>
-                  <select
-                    className={`form-select ${errors.type ? "is-invalid" : ""}`}
-                    {...register("type", { required: "Type is required" })}
-                  >
-                    <option value=''>Select type...</option>
-                    {tags.map((tag) => (
-                      <option key={tag.value} value={tag.value}>
-                        {tag.label}
-                      </option>
-                    ))}
-                  </select>
-                  {errors.type && (
-                    <div className='invalid-feedback'>
-                      {errors.type.message}
-                    </div>
-                  )}
-                </div>
-              </div>
-              <div className='col-md-12'>
-                <div className='d-flex justify-content-center mb-3'>
-                  <Button type='submit' variant='contained' className='rounded'>
-                    Add Expense
-                  </Button>
-                </div>
-              </div>
-            </div>
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <Grid container spacing={2}>
+              <Grid item xs={12} md={6}>
+                <TextField
+                  label='Title'
+                  variant='outlined'
+                  fullWidth
+                  error={!!errors.title}
+                  helperText={errors.title ? errors.title.message : ""}
+                  {...register("title", { required: "Title is required" })}
+                />
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <TextField
+                  label='Amount'
+                  type='number'
+                  variant='outlined'
+                  fullWidth
+                  error={!!errors.amount}
+                  helperText={errors.amount ? errors.amount.message : ""}
+                  {...register("amount", {
+                    required: "Amount is required",
+                    valueAsNumber: true,
+                    validate: (value) =>
+                      value > 0 || "Amount must be greater than 0",
+                  })}
+                />
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <TextField
+                  select
+                  label='Type'
+                  variant='outlined'
+                  fullWidth
+                  error={!!errors.type}
+                  helperText={errors.type ? errors.type.message : ""}
+                  {...register("type", { required: "Type is required" })}
+                >
+                  <MenuItem value=''>
+                    <em>Select type...</em>
+                  </MenuItem>
+                  {tags.map((tag) => (
+                    <MenuItem key={tag.value} value={tag.value}>
+                      {tag.label}
+                    </MenuItem>
+                  ))}
+                </TextField>
+              </Grid>
+              <Grid item xs={12}>
+                <Button
+                  type='submit'
+                  variant='contained'
+                  color='primary'
+                  fullWidth
+                >
+                  Add Expense
+                </Button>
+              </Grid>
+            </Grid>
           </form>
         </AccordionDetails>
       </Accordion>
