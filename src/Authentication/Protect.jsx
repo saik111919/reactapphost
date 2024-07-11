@@ -8,7 +8,7 @@ const Protect = ({ Component, name }) => {
   useEffect(() => {
     document.title = name;
     if (!token) {
-      navigate("/login");
+      navigate("/reactapphost/login");
     }
   }, [name, navigate, token]);
 

@@ -6,7 +6,7 @@ export default function routes() {
   const routes = [
     {
       id: 1,
-      path: "/",
+      path: "/reactapphost/",
       Component: Home,
       name: "Home",
       isProtected: true,
@@ -15,7 +15,7 @@ export default function routes() {
     },
     {
       id: 2,
-      path: "/expense",
+      path: "/reactapphost/expense",
       Component: ExpenseTraker,
       name: "Expense Traker",
       isProtected: true,
@@ -24,7 +24,7 @@ export default function routes() {
     },
     {
       id: 2,
-      path: "/login",
+      path: "/reactapphost/login",
       Component: Login,
       name: "Login",
       isProtected: false,

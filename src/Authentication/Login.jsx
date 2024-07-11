@@ -14,7 +14,7 @@ const Login = () => {
     loginFun(data)
       .then(({ data }) => {
         localStorage.setItem("token", data.token);
-        navigate("/");
+        navigate("/reactapphost/");
       })
       .catch((err) => {
         console.error(err);
