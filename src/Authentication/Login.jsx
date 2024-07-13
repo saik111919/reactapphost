@@ -1,6 +1,9 @@
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { loginFun } from "../Api/Service";
+import LoginSvg from "../assets/LoginSvg";
+import Loader from "../Utils/Loader";
+import { useState } from "react";
 
 const Login = () => {
   const {
@@ -9,8 +12,10 @@ const Login = () => {
     formState: { errors },
   } = useForm();
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
   const onSubmit = (data) => {
+    setLoading(true);
     loginFun(data)
       .then(({ data }) => {
         localStorage.setItem("token", data.token);
@@ -18,53 +23,59 @@ const Login = () => {
       })
       .catch((err) => {
         console.error(err);
+      })
+      .finally(() => {
+        setLoading(false);
       });
   };
 
+  const mobileError = errors["mobile"];
+
   return (
-    <div className='container mt-5'>
-      <div className='row justify-content-center'>
-        <div className='col-md-6'>
-          <div className='card'>
-            <div className='card-header'>
-              <h3>Login</h3>
-            </div>
-            <div className='card-body'>
-              <form onSubmit={handleSubmit(onSubmit)}>
-                <div className='form-group mb-3'>
-                  <label htmlFor='mobileNumber'>Mobile Number</label>
-                  <input
-                    type='text'
-                    className={`form-control ${
-                      errors.mobile ? "is-invalid" : ""
-                    }`}
-                    id='mobileNumber'
-                    {...register("mobile", {
-                      required: {
-                        value: true,
-                        message: "Mobile number is required",
-                      },
-                      pattern: {
-                        value: /^[0-9]{10}$/,
-                        message: "Invalid mobile number format",
-                      },
-                    })}
-                  />
-                  {errors.mobile && (
-                    <div className='invalid-feedback'>
-                      {errors.mobile.message}
-                    </div>
-                  )}
+    <>
+      <Loader loader={loading} />
+      <div className='login-page p-0 m-0'>
+        <div className='row p-0'>
+          <div className='col-md-12'>
+            <div className='d-flex justify-content-center align-items-center login-form-body'>
+              <div className='login-body'>
+                <div className='mb-3 login-title'>
+                  <h1 className='d-flex flex-wrap justify-content-center align-items-baseline'>
+                    <LoginSvg />
+                    Login
+                  </h1>
                 </div>
-                <button type='submit' className='btn btn-primary'>
-                  Login
-                </button>
-              </form>
+                <div className='login-form'>
+                  <form onSubmit={handleSubmit(onSubmit)}>
+                    <div className='form-group mt-2'>
+                      <input
+                        type='text'
+                        className={`form-control border border-2 ${
+                          mobileError && "is-invalid"
+                        }`}
+                        placeholder='Enter Mobile number'
+                        {...register("mobile", {
+                          required: "Mobile Number is required",
+                          pattern: /^[0-9]{10}$/,
+                        })}
+                      />
+                      {mobileError && (
+                        <div className='invalid-feedback'>
+                          {mobileError.message}
+                        </div>
+                      )}
+                    </div>
+                    <div className='d-flex justify-content-center login-btn'>
+                      <button className='btn btn-primary'>Login</button>
+                    </div>
+                  </form>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

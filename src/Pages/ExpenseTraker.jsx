@@ -2,21 +2,15 @@ import { useEffect, useState } from "react";
 import ExpenseForm from "../Component/Expense/ExpenseForm";
 import CalculateTheSpends from "../Component/Expense/CalculateTheSpends";
 import { DeleteTransactions, GetTransactions } from "../Api/Service.js";
-import {
-  Breadcrumbs,
-  CircularProgress,
-  Stack,
-  Typography,
-} from "@mui/material";
 import { Link } from "react-router-dom";
 
 const ExpenseTrake = () => {
   const [expenses, setExpenses] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  const addExpense = (expense) => {
-    setExpenses((prevExpenses) => [...prevExpenses, expense]);
-  };
+  // const addExpense = (expense) => {
+  //   setExpenses((prevExpenses) => [...prevExpenses, expense]);
+  // };
 
   function deleteTransactions(id) {
     DeleteTransactions(id)
@@ -55,42 +49,47 @@ const ExpenseTrake = () => {
   }, []);
 
   const breadcrumbs = [
-    <Link underline='hover' key='1' color='inherit' to='/reactapphost/'>
+    <Link key='1' to='/reactapphost/'>
       Home
     </Link>,
-
-    <Typography key='3' color='text.primary'>
+    <span key='2'>›</span>,
+    <span key='3' className='text-primary'>
       Expense Tracker
-    </Typography>,
+    </span>,
   ];
 
   return (
     <div className='mt-2'>
-      <Stack className='ms-3 align-self-center' spacing={2}>
-        <Breadcrumbs separator='›' aria-label='breadcrumb'>
-          {breadcrumbs}
-        </Breadcrumbs>
-      </Stack>
-      <ExpenseForm onAddExpense={addExpense} getData={getData} />
+      <div className='ms-3 align-self-center mb-3'>
+        <nav aria-label='breadcrumb'>
+          <ol className='breadcrumb'>
+            {breadcrumbs.map((breadcrumb, index) => (
+              <li className='breadcrumb-item' key={index}>
+                {breadcrumb}
+              </li>
+            ))}
+          </ol>
+        </nav>
+      </div>
+      <ExpenseForm getData={getData} />
       <div className='row p-0'>
-        {expenses.length > 0 ? (
+        {loading && expenses.length === 0 ? (
+          <div className='col-md-12 d-flex justify-content-center align-items-center'>
+            <div className='spinner-border' role='status'>
+              <span className='visually-hidden'>Loading...</span>
+            </div>
+          </div>
+        ) : expenses.length > 0 ? (
           <div className='col-md-12'>
             <CalculateTheSpends
               expenses={expenses}
               onDeleteExpense={deleteExpense}
             />
           </div>
-        ) : loading && expenses.length === 0 ? (
-          <div className='col-md-12 d-flex justify-content-center align-items-center'>
-            <CircularProgress /> {/* Display circular progress */}
-          </div>
         ) : (
-          loading &&
-          expenses.length === 0 && (
-            <div className='col-md-12'>
-              <h1 className='text-center mt-3'>No Data Available</h1>
-            </div>
-          )
+          <div className='col-md-12'>
+            <h1 className='text-center mt-3'>No Data Available</h1>
+          </div>
         )}
       </div>
     </div>

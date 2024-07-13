@@ -8,3 +8,64 @@
 .navbar-toggler:focus {
   box-shadow: none !important;
 }
+
+.login-page {
+  overflow: hidden;
+  & .login-form-body {
+    height: 100dvh;
+  }
+
+  & .login-body {
+    width: 400px;
+    height: 400px;
+    padding: 20px;
+    background-color: #0000008a;
+    border-radius: 12px;
+    box-shadow: rgba(0, 0, 0, 0.07) 0px 1px 2px, rgba(0, 0, 0, 0.07) 0px 2px 4px,
+      rgba(0, 0, 0, 0.07) 0px 4px 8px, rgba(0, 0, 0, 0.07) 0px 8px 16px,
+      rgba(0, 0, 0, 0.07) 0px 16px 32px, rgba(0, 0, 0, 0.07) 0px 32px 64px;
+    & .login-title {
+      background-color: #ffffff29;
+      color: black;
+      text-decoration: underline;
+      padding: 0.5rem 0.75rem;
+      border-radius: 12px;
+      box-shadow: rgba(0, 0, 0, 0.07) 0px 1px 2px,
+        rgba(0, 0, 0, 0.07) 0px 2px 4px, rgba(0, 0, 0, 0.07) 0px 4px 8px,
+        rgba(0, 0, 0, 0.07) 0px 8px 16px, rgba(0, 0, 0, 0.07) 0px 16px 32px,
+        rgba(0, 0, 0, 0.07) 0px 32px 64px;
+      & .login-title:hover {
+        text-decoration: none;
+        background-color: #fff;
+      }
+    }
+
+    & .login-form {
+      margin-top: 2rem;
+      padding: 0.5rem 0.75rem;
+      border-radius: 12px;
+      background-color: #ffffff29;
+      color: black;
+      box-shadow: rgba(0, 0, 0, 0.07) 0px 1px 2px,
+        rgba(0, 0, 0, 0.07) 0px 2px 4px, rgba(0, 0, 0, 0.07) 0px 4px 8px,
+        rgba(0, 0, 0, 0.07) 0px 8px 16px, rgba(0, 0, 0, 0.07) 0px 16px 32px,
+        rgba(0, 0, 0, 0.07) 0px 32px 64px;
+
+      & .login-btn {
+        margin-top: 1rem;
+      }
+    }
+  }
+}
+
+.money-icon {
+  border-radius: 50%;
+  height: 30px;
+  width: 30px;
+  text-align: center;
+}
+.spent-style {
+  height: 30px;
+  width: 30px;
+  text-align: center;
+}
