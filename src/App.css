@@ -69,3 +69,14 @@
   width: 30px;
   text-align: center;
 }
+
+.animation-container {
+  width: 20%; /* Adjust size as needed */
+  height: 20%; /* Adjust size as needed */
+}
+
+.animation-container svg {
+  width: 100%; /* Ensures the SVG scales within its container */
+  height: 100%; /* Ensures the SVG scales within its container */
+  fill: currentColor; /* Inherit color from parent */
+}

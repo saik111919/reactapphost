@@ -52,7 +52,6 @@ const ExpenseTrake = () => {
     <Link key='1' to='/reactapphost/'>
       Home
     </Link>,
-    <span key='2'>›</span>,
     <span key='3' className='text-primary'>
       Expense Tracker
     </span>,
@@ -84,6 +83,7 @@ const ExpenseTrake = () => {
             <CalculateTheSpends
               expenses={expenses}
               onDeleteExpense={deleteExpense}
+              showTable={true}
             />
           </div>
         ) : (
