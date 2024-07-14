@@ -10,6 +10,7 @@ const CalculateTheSpends = ({
   onDeleteExpense,
   showTable = true,
 }) => {
+  // Validation of props
   if (!Array.isArray(expenses)) {
     console.error("Invalid prop 'expenses'. Expected an array.");
     return null;
@@ -24,34 +25,57 @@ const CalculateTheSpends = ({
     return <h6>No expenses available</h6>;
   }
 
+  // Extract first expense data and group transactions by date
   const expenseData = expenses[0];
 
   const groupTransactionsByDate = () => {
     const groupedTransactions = {};
     expenseData.transactions.forEach((transaction) => {
-      const date = new Date(transaction.createdAt).toLocaleDateString();
-      if (!groupedTransactions[date]) {
-        groupedTransactions[date] = [];
+      const date = new Date(transaction.createdAt);
+      const monthYear = date.toLocaleDateString(undefined, {
+        year: "numeric",
+        month: "long",
+      });
+      const day = date.getDate();
+
+      if (!groupedTransactions[monthYear]) {
+        groupedTransactions[monthYear] = {};
       }
-      groupedTransactions[date].push(transaction);
+
+      if (!groupedTransactions[monthYear][day]) {
+        groupedTransactions[monthYear][day] = [];
+      }
+
+      groupedTransactions[monthYear][day].push(transaction);
     });
     return groupedTransactions;
   };
 
   const groupedTransactions = groupTransactionsByDate();
-  const dateOptions = Object.keys(groupedTransactions);
-  const dateOpetionState = dateOptions[0] || "";
+  const monthOptions = Object.keys(groupedTransactions);
+  const [selectedMonth, setSelectedMonth] = useState(monthOptions[0] || "");
 
-  const [selectedDate, setSelectedDate] = useState(dateOpetionState);
+  const dayOptions = selectedMonth
+    ? Object.keys(groupedTransactions[selectedMonth])
+    : [];
+  const [selectedDay, setSelectedDay] = useState(
+    new Date().getDate().toString()
+  ); // Select current day as default
+
+  // Ensure selectedMonth and selectedDay are valid when groupedTransactions change
+  useEffect(() => {
+    if (!monthOptions.includes(selectedMonth)) {
+      setSelectedMonth(monthOptions[0] || "");
+    }
+  }, [monthOptions, selectedMonth]);
 
   useEffect(() => {
-    if (dateOptions.length > 0) {
-      if (dateOptions.includes(selectedDate)) {
-        setSelectedDate(dateOptions[dateOptions.length - 1]);
-      }
+    if (selectedMonth && !dayOptions.includes(selectedDay)) {
+      setSelectedDay(dayOptions[0] || "");
     }
-  }, [dateOptions, selectedDate]);
+  }, [selectedMonth, dayOptions, selectedDay]);
 
+  // Function to get card classes based on type
   const getCardClasses = (type) => {
     return `card p-3 flex-fill ${
       type === "spent"
@@ -60,25 +84,50 @@ const CalculateTheSpends = ({
     }`;
   };
 
+  // Render component UI
   return (
     <div className='card shadow-sm p-4 mb-4'>
       <h5 className='mb-3'>Expense Details</h5>
-      <div className='mb-3'>
-        <label htmlFor='dateSelect' className='form-label'>
-          Date
-        </label>
-        <select
-          id='dateSelect'
-          className='form-select'
-          value={selectedDate}
-          onChange={(e) => setSelectedDate(e.target.value)}
-        >
-          {dateOptions.map((date) => (
-            <option key={date} value={date}>
-              {date}
-            </option>
-          ))}
-        </select>
+      <div className='d-flex gap-2'>
+        {monthOptions.length > 1 && (
+          <div className='mb-3 flex-fill'>
+            <label htmlFor='monthSelect' className='form-label'>
+              Month
+            </label>
+            <select
+              id='monthSelect'
+              className='form-select'
+              value={selectedMonth}
+              onChange={(e) => setSelectedMonth(e.target.value)}
+            >
+              {monthOptions.map((month) => (
+                <option key={month} value={month}>
+                  {month}
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
+
+        {showTable && (
+          <div className='mb-3 flex-fill'>
+            <label htmlFor='daySelect' className='form-label'>
+              Day
+            </label>
+            <select
+              id='daySelect'
+              className='form-select'
+              value={selectedDay}
+              onChange={(e) => setSelectedDay(e.target.value)}
+            >
+              {dayOptions.map((day) => (
+                <option key={day} value={day}>
+                  {day}
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
       </div>
 
       <div className='d-flex justify-content-between mb-3 flex-wrap gap-3'>
@@ -88,9 +137,9 @@ const CalculateTheSpends = ({
               <h6>Total Spent</h6>
               <p>₹{expenseData.totalSpent.toFixed(2)}</p>
             </div>
-            <div className=' money-icon'>
+            <div className='money-icon'>
               <SpentSvg />
-            </div>{" "}
+            </div>
           </div>
         </div>
         <div className={getCardClasses("credited")}>
@@ -101,7 +150,7 @@ const CalculateTheSpends = ({
             </div>
             <div className='money-icon'>
               <CreditSvg />
-            </div>{" "}
+            </div>
           </div>
         </div>
         <div className='card p-3 flex-fill border-info text-info'>
@@ -117,30 +166,34 @@ const CalculateTheSpends = ({
         </div>
       </div>
 
-      {showTable === true
-        ? selectedDate && (
-            <div>
-              <div className='card p-2 mb-3'>
-                <h6>{selectedDate}</h6>
-              </div>
-              <div
-                className='table-responsive'
-                style={{
-                  height: "34.55em",
-                  scrollbarWidth: "thin",
-                }}
-              >
-                <table className='table table-bordered table-hover'>
-                  <thead className='thead-light sticky-top'>
-                    <tr>
-                      <th className='text-center'>Title</th>
-                      <th className='text-center'>Amount</th>
-                      <th className='text-center'>Action</th>
-                      <th className='text-center'>Type</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {groupedTransactions[selectedDate].map((transaction) => (
+      {showTable === true &&
+        selectedMonth &&
+        selectedDay &&
+        groupedTransactions[selectedMonth] &&
+        groupedTransactions[selectedMonth][selectedDay] && (
+          <div>
+            <div className='card p-2 mb-3'>
+              <h6>{`${selectedMonth}, ${selectedDay}`}</h6>
+            </div>
+            <div
+              className='table-responsive'
+              style={{
+                height: "34.55em",
+                scrollbarWidth: "thin",
+              }}
+            >
+              <table className='table table-bordered table-hover'>
+                <thead className='thead-light sticky-top'>
+                  <tr>
+                    <th className='text-center'>Title</th>
+                    <th className='text-center'>Amount</th>
+                    <th className='text-center'>Action</th>
+                    <th className='text-center'>Type</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {groupedTransactions[selectedMonth][selectedDay].map(
+                    (transaction) => (
                       <tr key={transaction._id}>
                         <td
                           className='text-center text-truncate'
@@ -162,27 +215,28 @@ const CalculateTheSpends = ({
                         </td>
                         <td className='text-center align-content-center'>
                           <span
-                            className={` text-center ${
+                            className={`badge ${
                               transaction.type === "spent"
-                                ? "badge bg-danger text-white"
-                                : "badge bg-success text-white"
+                                ? "bg-danger text-white"
+                                : "bg-success text-white"
                             }`}
                           >
                             {transaction.type.toUpperCase()}
                           </span>
                         </td>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+                    )
+                  )}
+                </tbody>
+              </table>
             </div>
-          )
-        : null}
+          </div>
+        )}
     </div>
   );
 };
 
+// Prop types definition for CalculateTheSpends component
 CalculateTheSpends.propTypes = {
   showTable: PropTypes.bool,
   expenses: PropTypes.arrayOf(
