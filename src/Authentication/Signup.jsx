@@ -1,36 +1,35 @@
 import { useForm } from "react-hook-form";
-import { Link, useNavigate } from "react-router-dom";
-import { loginFun } from "../Api/Service";
-import LoginSvg from "../assets/LoginSvg";
-import Loader from "../Utils/Loader";
 import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { registerUser } from "../Api/Service"; // Adjust the path as necessary
+import Loader from "../Utils/Loader";
 
-const Login = () => {
+const Signup = () => {
   const {
     register,
     handleSubmit,
     formState: { errors },
+    watch,
   } = useForm();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     setLoading(true);
-    loginFun(data)
+    registerUser(data)
       .then(({ data }) => {
-        localStorage.setItem("token", data.token);
-        navigate("/reactapphost/");
+        console.log(data.message);
+        navigate("/reactapphost/login");
       })
-      .catch((err) => {
-        console.error(err);
+      .catch(() => {
+        console.error("Failed to register user");
       })
       .finally(() => {
         setLoading(false);
       });
   };
 
-  const mobileError = errors["mobile"];
-  const passwordError = errors["password"];
+  const password = watch("password", "");
 
   return (
     <>
@@ -42,8 +41,7 @@ const Login = () => {
               <div className='login-body'>
                 <div className='mb-3 login-title'>
                   <h1 className='d-flex flex-wrap justify-content-center align-items-baseline'>
-                    <LoginSvg />
-                    Login
+                    Signup
                   </h1>
                 </div>
                 <div className='login-form'>
@@ -52,17 +50,20 @@ const Login = () => {
                       <input
                         type='text'
                         className={`form-control border border-2 ${
-                          mobileError && "is-invalid"
+                          errors.mobile && "is-invalid"
                         }`}
                         placeholder='Enter Mobile number'
                         {...register("mobile", {
                           required: "Mobile Number is required",
-                          pattern: /^[0-9]{10}$/,
+                          pattern: {
+                            value: /^[0-9]{10}$/,
+                            message: "Enter a valid 10-digit mobile number",
+                          },
                         })}
                       />
-                      {mobileError && (
+                      {errors.mobile && (
                         <div className='invalid-feedback'>
-                          {mobileError.message}
+                          {errors.mobile.message}
                         </div>
                       )}
                     </div>
@@ -70,9 +71,9 @@ const Login = () => {
                       <input
                         type='password'
                         className={`form-control border border-2 ${
-                          passwordError && "is-invalid"
+                          errors.password && "is-invalid"
                         }`}
-                        placeholder='Enter Mobile number'
+                        placeholder='Enter Password'
                         {...register("password", {
                           required: "Password is required",
                           minLength: {
@@ -82,17 +83,36 @@ const Login = () => {
                           },
                         })}
                       />
-                      {passwordError && (
+                      {errors.password && (
                         <div className='invalid-feedback'>
-                          {passwordError.message}
+                          {errors.password.message}
                         </div>
                       )}
                     </div>
-                    <div className='d-flex justify-content-center login-btn'>
-                      <button className='btn btn-primary'>Login</button>
+                    <div className='form-group mt-2'>
+                      <input
+                        type='password'
+                        className={`form-control border border-2 ${
+                          errors.confirmPassword && "is-invalid"
+                        }`}
+                        placeholder='Confirm Password'
+                        {...register("confirmPassword", {
+                          required: "Please confirm your password",
+                          validate: (value) =>
+                            value === password || "Passwords do not match",
+                        })}
+                      />
+                      {errors.confirmPassword && (
+                        <div className='invalid-feedback'>
+                          {errors.confirmPassword.message}
+                        </div>
+                      )}
                     </div>
-                    <div className='d-flex justify-content-center login-btn'>
-                      <Link to='/reactapphost/signup'>New User? Register</Link>
+                    <div className='d-flex justify-content-center login-btn mt-3'>
+                      <button className='btn btn-primary'>Signup</button>
+                    </div>
+                    <div className='d-flex justify-content-center login-btn mt-3'>
+                      <Link to='/reactapphost/login'>Back to Login</Link>
                     </div>
                   </form>
                 </div>
@@ -105,4 +125,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Signup;

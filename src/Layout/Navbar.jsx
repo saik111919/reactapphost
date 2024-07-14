@@ -2,6 +2,7 @@ import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import routes from "../routes/routes";
 import { useEffect, useState } from "react";
 import MoneySvg from "../assets/images/MoneySvg";
+import MenuSvg from "../assets/images/Menu V2/MenuSvg";
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -43,15 +44,7 @@ const Navbar = () => {
             aria-expanded='false'
             aria-label='Toggle navigation'
           >
-            <svg
-              xmlns='http://www.w3.org/2000/svg'
-              height='24px'
-              viewBox='0 -960 960 960'
-              width='24px'
-              fill='inherit'
-            >
-              <path d='M120-240v-80h720v80H120Zm0-200v-80h720v80H120Zm0-200v-80h720v80H120Z' />
-            </svg>
+            <MenuSvg />
           </button>
           <div className='collapse navbar-collapse' id='navbarSupportedContent'>
             <ul className='navbar-nav me-auto mb-2 mb-lg-0'>

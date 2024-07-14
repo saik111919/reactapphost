@@ -1,6 +1,7 @@
 import { client } from "./client";
 
-export const BASE_URL = "https://my-app-ebon-omega.vercel.app";
+export const BASE_URL = "http://localhost:4000";
+// export const BASE_URL = "https://my-app-ebon-omega.vercel.app";
 
 const UserToken = () => localStorage.getItem("token");
 
@@ -12,6 +13,9 @@ export const config = () => ({
 
 export function loginFun(body) {
   return client.post(`${BASE_URL}/api/login`, body);
+}
+export function registerUser(body) {
+  return client.post(`${BASE_URL}/api/register`, body);
 }
 
 export const AddTransactions = (body) => {

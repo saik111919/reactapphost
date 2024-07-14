@@ -9,7 +9,7 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path='/reactapphost' element={<Navbar />}>
+        <Route path='/reactapphost/' element={<Navbar />}>
           {routes().map(
             (route) =>
               route.isNav && (

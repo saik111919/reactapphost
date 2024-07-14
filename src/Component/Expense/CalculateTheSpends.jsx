@@ -36,20 +36,17 @@ const CalculateTheSpends = ({ expenses, onDeleteExpense }) => {
 
   const groupedTransactions = groupTransactionsByDate();
   const dateOptions = Object.keys(groupedTransactions);
+  const dateOpetionState = dateOptions[0] || "";
 
-  const [selectedDate, setSelectedDate] = useState(dateOptions[0] || "");
-
-  useEffect(() => {
-    if (dateOptions.length > 0 && !dateOptions.includes(selectedDate)) {
-      setSelectedDate(dateOptions[dateOptions.length - 1]);
-    }
-  }, [dateOptions]);
+  const [selectedDate, setSelectedDate] = useState(dateOpetionState);
 
   useEffect(() => {
     if (dateOptions.length > 0) {
-      setSelectedDate(dateOptions[dateOptions.length - 1]);
+      if (dateOptions.includes(selectedDate)) {
+        setSelectedDate(dateOptions[dateOptions.length - 1]);
+      }
     }
-  }, [expenses]);
+  }, [dateOptions, selectedDate]);
 
   const getCardClasses = (type) => {
     return `card p-3 flex-fill ${
@@ -74,8 +71,6 @@ const CalculateTheSpends = ({ expenses, onDeleteExpense }) => {
               <SpentSvg />
             </div>{" "}
           </div>
-
-          {/* <img src={spentIcon} alt="Spent" /> */}
         </div>
         <div className={getCardClasses("credited")}>
           <div className='d-flex justify-content-between align-items-center'>
@@ -87,7 +82,6 @@ const CalculateTheSpends = ({ expenses, onDeleteExpense }) => {
               <CreditSvg />
             </div>{" "}
           </div>
-          {/* <img src={creditedIcon} alt="Credited" /> */}
         </div>
         <div className='card p-3 flex-fill border-info text-info'>
           <div className='d-flex justify-content-between align-items-center'>
@@ -150,13 +144,13 @@ const CalculateTheSpends = ({ expenses, onDeleteExpense }) => {
                         <DeleteSvg />
                       </button>
                     </td>
-                    <td className='text-center'>
+                    <td className='text-center align-content-center'>
                       <span
-                        className={
+                        className={` text-center ${
                           transaction.type === "spent"
                             ? "badge bg-danger text-white"
                             : "badge bg-success text-white"
-                        }
+                        }`}
                       >
                         {transaction.type.toUpperCase()}
                       </span>
