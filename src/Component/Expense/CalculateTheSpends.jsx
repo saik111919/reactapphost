@@ -424,7 +424,7 @@ const CalculateTheSpends = ({
         groupedTransactions[selectedMonth][selectedDay] && (
           <div>
             <div className='card p-2 mb-3'>
-              <h6>{`${selectedMonth}, ${selectedDay}`}</h6>
+              <h6 className="m-0 p-2" >{`${selectedMonth}, ${selectedDay}`}</h6>
             </div>
             <div
               className='table-responsive'
