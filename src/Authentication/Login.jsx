@@ -25,7 +25,6 @@ const Login = () => {
         navigate("/reactapphost/");
       })
       .catch((err) => {
-        console.log(err);
         const errMsg = err?.data?.message || "Error occured.";
         addToast("error", errMsg, 5000);
       })
@@ -77,7 +76,7 @@ const Login = () => {
                         className={`form-control border border-2 ${
                           passwordError && "is-invalid"
                         }`}
-                        placeholder='Enter Mobile number'
+                        placeholder='Enter password'
                         {...register("password", {
                           required: "Password is required",
                           minLength: {

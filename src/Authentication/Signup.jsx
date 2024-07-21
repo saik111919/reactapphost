@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { registerUser } from "../Api/Service"; // Adjust the path as necessary
 import Loader from "../Utils/Loader";
+import { useToast } from "../Plugins/Toast/ToastContext";
 
 const Signup = () => {
   const {
@@ -13,16 +14,19 @@ const Signup = () => {
   } = useForm();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const addToast = useToast();
+
 
   const onSubmit = async (data) => {
     setLoading(true);
     registerUser(data)
       .then(({ data }) => {
-        console.log(data.message);
+        addToast("success", data.message, 5000);
         navigate("/reactapphost/login");
       })
-      .catch(() => {
-        console.error("Failed to register user");
+      .catch((err) => {
+        const errMsg = err?.data?.message || "Error occured.";
+        addToast("error", errMsg, 5000);
       })
       .finally(() => {
         setLoading(false);

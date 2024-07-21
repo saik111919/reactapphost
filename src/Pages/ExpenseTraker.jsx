@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import ExpenseForm from "../Component/Expense/ExpenseForm";
 import CalculateTheSpends from "../Component/Expense/CalculateTheSpends";
 import { DeleteTransactions, GetTransactions } from "../Api/Service.js";
 import { Link } from "react-router-dom";
@@ -56,9 +55,9 @@ const ExpenseTrake = () => {
 
   return (
     <div className='mt-2'>
-      <div className='ms-3 align-self-center mb-3'>
-        <nav aria-label='breadcrumb'>
-          <ol className='breadcrumb'>
+      <div className='card mb-2' >
+        <nav aria-label='breadcrumb'className="card-body" >
+          <ol className='breadcrumb m-0' >
             {breadcrumbs.map((breadcrumb, index) => (
               <li className='breadcrumb-item' key={index}>
                 {breadcrumb}
@@ -67,7 +66,6 @@ const ExpenseTrake = () => {
           </ol>
         </nav>
       </div>
-      <ExpenseForm getData={getData} />
       <div className='row p-0'>
         {loading && expenses.length === 0 ? (
           <div className='col-md-12 d-flex justify-content-center align-items-center'>
@@ -81,6 +79,7 @@ const ExpenseTrake = () => {
               expenses={expenses}
               onDeleteExpense={deleteExpense}
               showTable={true}
+              getData={getData}
             />
           </div>
         ) : (

@@ -51,29 +51,44 @@ const Home = () => {
   return (
     <div>
       <Loader loader={loading} />
-      <Link
-        to={"/reactapphost/expense"}
-        className='btn btn-outline-primary mb-1'
-      >
-        <div className='d-flex gap-1 justify-content-center align-items-center'>
-          ExpenseTracker <ArrowRight />
-        </div>
-      </Link>
-      {!loading && expenses.length > 0 && (
-        <Suspense
-          fallback={
-            <div className='text-center mt-4'>
-              <h5>Loading...</h5>
+      <div className="row">
+        <div className="col-md-6 col-lg-4 mb-1  mb-sm-0">
+          <div className="card shadow-sm h-100">
+            {/* <img src={expenseImage} className="card-img-top" alt="Expense" /> */}
+            <div className="card-body">
+              <h5 className="card-title">Expense Tracker</h5>
+              <p className="card-text m-0">
+                Track and manage your expenses effectively.
+              </p>
+              
             </div>
-          }
-        >
-          <CalculateTheSpends
-            expenses={expenses}
-            onDeleteExpense={deleteExpense}
-            showTable={false}
-          />
-        </Suspense>
-      )}
+            <div className="card-footer d-flex justify-content-end">
+            <Link to={"/reactapphost/expense"} className="btn btn-primary">
+                <div className="d-flex gap-1 justify-content-center align-items-center">
+                  Go to Expense Tracker <ArrowRight />
+                </div>
+              </Link>
+            </div>
+          </div>
+        </div>
+        <div className="col-md-6 col-lg-8">
+          {!loading && (
+            <Suspense
+              fallback={
+                <div className='text-center mt-4'>
+                  <h5>Loading...</h5>
+                </div>
+              }
+            >
+              <CalculateTheSpends
+                expenses={expenses}
+                onDeleteExpense={deleteExpense}
+                showTable={false}
+              />
+            </Suspense>
+          )}
+        </div>
+      </div>
     </div>
   );
 };
