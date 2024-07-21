@@ -11,9 +11,15 @@ const CalculateTheSpends = ({
   expenses,
   onDeleteExpense,
   showTable = true,
-  getData
+  getData,
 }) => {
-  // Validation of props using PropTypes
+  if (!Array.isArray(expenses) || expenses.length === 0) {
+    return <h6>No expenses available</h6>;
+  }
+
+  if (typeof onDeleteExpense !== "function") {
+    return <h6>Error: Invalid onDeleteExpense handler</h6>;
+  }
 
   const expenseData = expenses[0];
 
@@ -65,36 +71,35 @@ const CalculateTheSpends = ({
   }, [selectedMonth, dayOptions, selectedDay]);
 
   const getCardClasses = (type) => {
-    return `card p-3 flex-fill ${type === "spent"
-      ? "border-danger text-danger"
-      : "border-success text-success"
-      }`;
+    return `card p-3 flex-fill ${
+      type === "spent"
+        ? "border-danger text-danger"
+        : "border-success text-success"
+    }`;
   };
 
-  if (!Array.isArray(expenses) || expenses.length === 0) {
-    return <h6>No expenses available</h6>;
-  }
-
-  if (typeof onDeleteExpense !== "function") {
-    return <h6>Error: Invalid onDeleteExpense handler</h6>;
-  }
-
   return (
-    <div className='card shadow-sm'>
-      <div className={showTable ? "card-header d-flex justify-content-between " : ''}>
-        <h5 className={showTable ? 'align-self-center mb-0' : 'ps-3 p-2 mb-0'}>Expense Details</h5>
+    <div className="card shadow-sm">
+      <div
+        className={
+          showTable ? "card-header d-flex justify-content-between " : ""
+        }
+      >
+        <h5 className={showTable ? "align-self-center mb-0" : "ps-3 p-2 mb-0"}>
+          Expense Details
+        </h5>
         {showTable && <AddExpensesModal getData={getData} />}
       </div>
-      <div className="card-body" >
-        <div className='d-flex gap-2'>
+      <div className="card-body">
+        <div className="d-flex gap-2">
           {monthOptions.length > 1 && (
-            <div className='mb-3 flex-fill'>
-              <label htmlFor='monthSelect' className='form-label'>
+            <div className="mb-3 flex-fill">
+              <label htmlFor="monthSelect" className="form-label">
                 Month
               </label>
               <select
-                id='monthSelect'
-                className='form-select'
+                id="monthSelect"
+                className="form-select"
                 value={selectedMonth}
                 onChange={(e) => setSelectedMonth(e.target.value)}
               >
@@ -108,13 +113,13 @@ const CalculateTheSpends = ({
           )}
 
           {showTable && (
-            <div className='mb-3 flex-fill'>
-              <label htmlFor='daySelect' className='form-label'>
+            <div className="mb-3 flex-fill">
+              <label htmlFor="daySelect" className="form-label">
                 Day
               </label>
               <select
-                id='daySelect'
-                className='form-select'
+                id="daySelect"
+                className="form-select"
                 value={selectedDay}
                 onChange={(e) => setSelectedDay(e.target.value)}
               >
@@ -129,36 +134,36 @@ const CalculateTheSpends = ({
         </div>
 
         {!showTable && (
-          <div className='d-flex justify-content-between mb-3 flex-wrap gap-3'>
+          <div className="d-flex justify-content-between mb-3 flex-wrap gap-3">
             <div className={getCardClasses("spent")}>
-              <div className='d-flex justify-content-between align-items-center'>
+              <div className="d-flex justify-content-between align-items-center">
                 <div>
                   <h6>Total Spent</h6>
                   <p>₹{expenseData.totalSpent.toFixed(2)}</p>
                 </div>
-                <div className='money-icon'>
+                <div className="money-icon">
                   <SpentSvg />
                 </div>
               </div>
             </div>
             <div className={getCardClasses("credited")}>
-              <div className='d-flex justify-content-between align-items-center'>
+              <div className="d-flex justify-content-between align-items-center">
                 <div>
                   <h6>Total Credited</h6>
                   <p>₹{expenseData.totalCredited.toFixed(2)}</p>
                 </div>
-                <div className='money-icon'>
+                <div className="money-icon">
                   <CreditSvg />
                 </div>
               </div>
             </div>
-            <div className='card p-3 flex-fill border-info text-info'>
-              <div className='d-flex justify-content-between align-items-center'>
+            <div className="card p-3 flex-fill border-info text-info">
+              <div className="d-flex justify-content-between align-items-center">
                 <div>
                   <h6>Remaining Amount</h6>
                   <p>₹{expenseData.remainingAmount.toFixed(2)}</p>
                 </div>
-                <div className='money-icon'>
+                <div className="money-icon">
                   <MoneySvg />
                 </div>
               </div>
@@ -172,23 +177,23 @@ const CalculateTheSpends = ({
           groupedTransactions[selectedMonth] &&
           groupedTransactions[selectedMonth][selectedDay] && (
             <div>
-              <div className='card p-2 mb-3'>
-                <h6 className="m-0 p-2" >{`${selectedMonth}, ${selectedDay}`}</h6>
+              <div className="card p-2 mb-3">
+                <h6 className="m-0 p-2">{`${selectedMonth}, ${selectedDay}`}</h6>
               </div>
               <div
-                className='table-responsive'
+                className="table-responsive"
                 style={{
                   height: "34.55em",
                   scrollbarWidth: "thin",
                 }}
               >
-                <table className='table table-bordered table-hover'>
-                  <thead className='thead-light sticky-top'>
+                <table className="table table-bordered table-hover">
+                  <thead className="thead-light sticky-top">
                     <tr>
-                      <th className='text-center'>Title</th>
-                      <th className='text-center'>Amount</th>
-                      <th className='text-center'>Action</th>
-                      <th className='text-center'>Type</th>
+                      <th className="text-center">Title</th>
+                      <th className="text-center">Amount</th>
+                      <th className="text-center">Action</th>
+                      <th className="text-center">Type</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -196,29 +201,30 @@ const CalculateTheSpends = ({
                       (transaction) => (
                         <tr key={transaction._id}>
                           <td
-                            className='text-center text-truncate'
+                            className="text-center text-truncate"
                             style={{ maxWidth: "100px" }}
                             title={transaction.title}
                           >
                             {transaction.title}
                           </td>
-                          <td className='text-center'>
+                          <td className="text-center">
                             ₹{transaction.amount.toFixed(2)}
                           </td>
-                          <td className='text-center'>
+                          <td className="text-center">
                             <button
-                              className='btn btn-danger'
+                              className="btn btn-danger"
                               onClick={() => onDeleteExpense(transaction._id)}
                             >
                               <DeleteSvg />
                             </button>
                           </td>
-                          <td className='text-center align-content-center'>
+                          <td className="text-center align-content-center">
                             <span
-                              className={`badge ${transaction.type === "spent"
-                                ? "bg-danger text-white"
-                                : "bg-success text-white"
-                                }`}
+                              className={`badge ${
+                                transaction.type === "spent"
+                                  ? "bg-danger text-white"
+                                  : "bg-success text-white"
+                              }`}
                             >
                               {transaction.type.toUpperCase()}
                             </span>
@@ -232,7 +238,6 @@ const CalculateTheSpends = ({
             </div>
           )}
       </div>
-
     </div>
   );
 };
@@ -259,7 +264,7 @@ CalculateTheSpends.propTypes = {
     })
   ).isRequired,
   onDeleteExpense: PropTypes.func.isRequired,
-  getData: PropTypes.func.isRequired
+  getData: PropTypes.func.isRequired,
 };
 
 export default CalculateTheSpends;
