@@ -3,30 +3,27 @@ import ExpenseForm from "../Component/Expense/ExpenseForm";
 import CalculateTheSpends from "../Component/Expense/CalculateTheSpends";
 import { DeleteTransactions, GetTransactions } from "../Api/Service.js";
 import { Link } from "react-router-dom";
+import {useToast} from "../Plugins/Toast/ToastContext"
 
 const ExpenseTrake = () => {
   const [expenses, setExpenses] = useState([]);
   const [loading, setLoading] = useState(false);
-
-  // const addExpense = (expense) => {
-  //   setExpenses((prevExpenses) => [...prevExpenses, expense]);
-  // };
+  const addToast = useToast()
 
   function deleteTransactions(id) {
     DeleteTransactions(id)
       .then(({ data }) => {
         console.log(data);
         getData();
+        addToast('warning', data.message, 5000)
       })
       .catch((err) => {
         console.error(err);
+        addToast('error', err.data.message || "Somthing went wrong", 5000)
       });
   }
 
   const deleteExpense = (id) => {
-    setExpenses((prevExpenses) =>
-      prevExpenses.filter((expense) => expense._id !== id)
-    );
     deleteTransactions(id);
   };
 

@@ -17,7 +17,7 @@ function App() {
                   key={route.id}
                   path={route.path}
                   element={
-                    <Protect Component={route.Component} name={route.name} />
+                    <Protect Component={route.Component} name={route.name} isProtected={route.isProtected} />
                   }
                 />
               )
@@ -30,7 +30,8 @@ function App() {
               <Route
                 key={route.id}
                 path={route.path}
-                element={<route.Component />}
+                element={
+                  <Protect Component={route.Component} name={route.name} isProtected={route.isProtected} />}
               />
             )
         )}

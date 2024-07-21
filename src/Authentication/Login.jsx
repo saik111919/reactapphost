@@ -4,6 +4,7 @@ import { loginFun } from "../Api/Service";
 import LoginSvg from "../assets/LoginSvg";
 import Loader from "../Utils/Loader";
 import { useState } from "react";
+import { useToast } from "../Plugins/Toast/ToastContext";
 
 const Login = () => {
   const {
@@ -13,16 +14,20 @@ const Login = () => {
   } = useForm();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const addToast = useToast();
 
   const onSubmit = (data) => {
     setLoading(true);
     loginFun(data)
       .then(({ data }) => {
+        addToast("success", data.message, 5000);
         localStorage.setItem("token", data.token);
         navigate("/reactapphost/");
       })
       .catch((err) => {
-        console.error(err);
+        console.log(err);
+        const errMsg = err?.data?.message || "Error occured.";
+        addToast("error", errMsg, 5000);
       })
       .finally(() => {
         setLoading(false);

@@ -2,13 +2,15 @@ import PropTypes from "prop-types";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-const Protect = ({ Component, name }) => {
+const Protect = ({ Component, name, isProtected }) => {
   const token = localStorage.getItem("token");
   const navigate = useNavigate();
   useEffect(() => {
     document.title = name;
-    if (!token) {
-      navigate("/reactapphost/login");
+    if (isProtected) {
+      if (!token) {
+        navigate("/reactapphost/login");
+      }
     }
   }, [name, navigate, token]);
 
@@ -18,6 +20,7 @@ const Protect = ({ Component, name }) => {
 Protect.propTypes = {
   Component: PropTypes.elementType.isRequired,
   name: PropTypes.string.isRequired,
+  isProtected: PropTypes.bool.isRequired,
 };
 
 export default Protect;

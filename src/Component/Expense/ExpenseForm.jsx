@@ -1,6 +1,7 @@
 import PropTypes from "prop-types";
 import { useForm } from "react-hook-form";
 import { AddTransactions } from "../../Api/Service";
+import {useToast} from "../../Plugins/Toast/ToastContext"
 
 const ExpenseForm = ({ getData }) => {
   const {
@@ -9,6 +10,7 @@ const ExpenseForm = ({ getData }) => {
     formState: { errors },
     reset,
   } = useForm();
+  const addToast = useToast()
 
   const tags = [
     { value: "spent", label: "Amount Spent" },
@@ -18,12 +20,12 @@ const ExpenseForm = ({ getData }) => {
   const onSubmit = (data) => {
     reset();
     AddTransactions(data)
-      .then((data) => {
-        console.log(data);
+      .then(({data}) => {
         getData();
+        addToast('success', data.message, 5000)
       })
       .catch((err) => {
-        console.error(err);
+        addToast('error', err?.data?.message|| "Somthing went wrong.", 5000)
       });
   };
 
