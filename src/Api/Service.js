@@ -29,3 +29,11 @@ export const GetTransactions = () => {
 export const DeleteTransactions = (id) => {
   return client.delete(`${BASE_URL}/api/manageTransactions/${id}`, config());
 };
+
+export const updateUserDetails = (user) => {
+  return client.patch(`${BASE_URL}/api/user-data`, user, config());
+};
+
+export const getUserDetails = () => {
+  return client.get(`${BASE_URL}/api/user-data`, config());
+};

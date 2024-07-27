@@ -1,4 +1,3 @@
-import React from "react";
 import { NavLink } from "react-router-dom";
 
 const SmallNavBar = () => {
@@ -14,7 +13,7 @@ const SmallNavBar = () => {
             </li>
             <li className='nav-item'>
               <NavLink className='nav-link' to='/reactapphost/expense'>
-                Expense Traker
+                Expense Tracker
               </NavLink>
             </li>
             <li className='nav-item'>
