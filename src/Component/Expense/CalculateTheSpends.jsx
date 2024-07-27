@@ -15,7 +15,13 @@ const CalculateTheSpends = ({
   getData,
 }) => {
   if (!Array.isArray(expenses) || expenses.length === 0) {
-    return <h6>No expenses available</h6>;
+    return (
+      <div className='card h-100'>
+        <div className='card-body d-flex align-items-center justify-content-center'>
+          <span>No expenses available</span>
+        </div>
+      </div>
+    );
   }
 
   if (typeof onDeleteExpense !== "function") {

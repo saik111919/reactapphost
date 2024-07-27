@@ -77,9 +77,13 @@ const ExpenseTrake = () => {
         </div>
         <div className='row p-0'>
           {loading && expenses.length === 0 ? (
-            <div className='col-md-12 d-flex justify-content-center align-items-center'>
-              <div className='spinner-border' role='status'>
-                <span className='visually-hidden'>Loading...</span>
+            <div className='col-md-12 my-1'>
+              <div className='card'>
+                <div className='card-body row'>
+                  <div className='col-md-12 d-flex justify-content-center align-items-center'>
+                    <span>Loading...</span>
+                  </div>
+                </div>
               </div>
             </div>
           ) : expenses.length > 0 ? (
@@ -93,7 +97,11 @@ const ExpenseTrake = () => {
             </div>
           ) : (
             <div className='col-md-12'>
-              <h1 className='text-center mt-3'>No Data Available</h1>
+              <div className='card'>
+                <div className='card-body row'>
+                  <span className='text-center'>No Data Available</span>
+                </div>
+              </div>
             </div>
           )}
         </div>

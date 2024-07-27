@@ -14,7 +14,7 @@ const Loader = ({ loader }) => {
 
   return (
     loader && (
-      <div className='d-flex justify-content-center align-items-center vh-100'>
+      <div className='loader'>
         <div
           className={`spinner-border ${
             theme === "dark" ? "text-light" : "text-dark"
