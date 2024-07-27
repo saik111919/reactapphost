@@ -2,6 +2,7 @@ import ExpenseTraker from "../Pages/ExpenseTraker";
 import Login from "../Authentication/Login";
 import Home from "../Pages/Home";
 import Signup from "../Authentication/Signup";
+import Settings from "../Pages/Settings/Settings";
 
 export default function routes() {
   const routes = [
@@ -40,6 +41,15 @@ export default function routes() {
       isProtected: false,
       isHeader: false,
       isNav: false,
+    },
+    {
+      id: 5,
+      path: "/reactapphost/settings",
+      Component: Settings,
+      name: "Settings",
+      isProtected: true,
+      isHeader: true,
+      isNav: true,
     },
   ];
   return routes;

@@ -1,11 +1,12 @@
+import React from "react";
 import PropTypes from "prop-types";
-import { useState, useMemo, useEffect } from "react";
 import DeleteSvg from "../../assets/images/DeleteSvg";
 import CreditSvg from "../../assets/images/CreditSvg";
 import SpentSvg from "../../assets/images/SpentSvg";
 import MoneySvg from "../../assets/images/MoneySvg";
-// import { IoMdAddCircleOutline } from "react-icons/io";
 import AddExpensesModal from "./AddExpensesModal";
+import useGroupedTransactions from "./CalculateSpends/useGroupedTransactions";
+import useExpenseSelector from "./CalculateSpends/useExpenseSelector";
 
 const CalculateTheSpends = ({
   expenses,
@@ -22,53 +23,15 @@ const CalculateTheSpends = ({
   }
 
   const expenseData = expenses[0];
-
-  // Memoize the grouping of transactions by date
-  const groupedTransactions = useMemo(() => {
-    const grouped = {};
-    expenseData.transactions.forEach((transaction) => {
-      const date = new Date(transaction.createdAt);
-      const monthYear = date.toLocaleDateString(undefined, {
-        year: "numeric",
-        month: "long",
-      });
-      const day = date.getDate();
-
-      if (!grouped[monthYear]) {
-        grouped[monthYear] = {};
-      }
-
-      if (!grouped[monthYear][day]) {
-        grouped[monthYear][day] = [];
-      }
-
-      grouped[monthYear][day].push(transaction);
-    });
-    return grouped;
-  }, [expenseData.transactions]);
-
-  const monthOptions = Object.keys(groupedTransactions);
-  const [selectedMonth, setSelectedMonth] = useState(monthOptions[0] || "");
-
-  const dayOptions = useMemo(() => {
-    return selectedMonth ? Object.keys(groupedTransactions[selectedMonth]) : [];
-  }, [selectedMonth, groupedTransactions]);
-
-  const [selectedDay, setSelectedDay] = useState(
-    new Date().getDate().toString()
-  );
-
-  useEffect(() => {
-    if (!monthOptions.includes(selectedMonth)) {
-      setSelectedMonth(monthOptions[0] || "");
-    }
-  }, [monthOptions, selectedMonth]);
-
-  useEffect(() => {
-    if (selectedMonth && !dayOptions.includes(selectedDay)) {
-      setSelectedDay(dayOptions[0] || "");
-    }
-  }, [selectedMonth, dayOptions, selectedDay]);
+  const groupedTransactions = useGroupedTransactions(expenseData.transactions);
+  const {
+    selectedMonth,
+    setSelectedMonth,
+    selectedDay,
+    setSelectedDay,
+    monthOptions,
+    dayOptions,
+  } = useExpenseSelector(groupedTransactions);
 
   const getCardClasses = (type) => {
     return `card p-3 flex-fill ${
@@ -79,7 +42,7 @@ const CalculateTheSpends = ({
   };
 
   return (
-    <div className="card shadow-sm">
+    <div className='card shadow-sm'>
       <div
         className={
           showTable ? "card-header d-flex justify-content-between " : ""
@@ -90,16 +53,16 @@ const CalculateTheSpends = ({
         </h5>
         {showTable && <AddExpensesModal getData={getData} />}
       </div>
-      <div className="card-body">
-        <div className="d-flex gap-2">
+      <div className='card-body'>
+        <div className='d-flex gap-2'>
           {monthOptions.length > 1 && (
-            <div className="mb-3 flex-fill">
-              <label htmlFor="monthSelect" className="form-label">
+            <div className='mb-3 flex-fill'>
+              <label htmlFor='monthSelect' className='form-label'>
                 Month
               </label>
               <select
-                id="monthSelect"
-                className="form-select"
+                id='monthSelect'
+                className='form-select'
                 value={selectedMonth}
                 onChange={(e) => setSelectedMonth(e.target.value)}
               >
@@ -113,13 +76,13 @@ const CalculateTheSpends = ({
           )}
 
           {showTable && (
-            <div className="mb-3 flex-fill">
-              <label htmlFor="daySelect" className="form-label">
+            <div className='mb-3 flex-fill'>
+              <label htmlFor='daySelect' className='form-label'>
                 Day
               </label>
               <select
-                id="daySelect"
-                className="form-select"
+                id='daySelect'
+                className='form-select'
                 value={selectedDay}
                 onChange={(e) => setSelectedDay(e.target.value)}
               >
@@ -134,36 +97,36 @@ const CalculateTheSpends = ({
         </div>
 
         {!showTable && (
-          <div className="d-flex justify-content-between mb-3 flex-wrap gap-3">
+          <div className='d-flex justify-content-between mb-3 flex-wrap gap-3'>
             <div className={getCardClasses("spent")}>
-              <div className="d-flex justify-content-between align-items-center">
+              <div className='d-flex justify-content-between align-items-center'>
                 <div>
                   <h6>Total Spent</h6>
                   <p>₹{expenseData.totalSpent.toFixed(2)}</p>
                 </div>
-                <div className="money-icon">
+                <div className='money-icon'>
                   <SpentSvg />
                 </div>
               </div>
             </div>
             <div className={getCardClasses("credited")}>
-              <div className="d-flex justify-content-between align-items-center">
+              <div className='d-flex justify-content-between align-items-center'>
                 <div>
                   <h6>Total Credited</h6>
                   <p>₹{expenseData.totalCredited.toFixed(2)}</p>
                 </div>
-                <div className="money-icon">
+                <div className='money-icon'>
                   <CreditSvg />
                 </div>
               </div>
             </div>
-            <div className="card p-3 flex-fill border-info text-info">
-              <div className="d-flex justify-content-between align-items-center">
+            <div className='card p-3 flex-fill border-info text-info'>
+              <div className='d-flex justify-content-between align-items-center'>
                 <div>
                   <h6>Remaining Amount</h6>
                   <p>₹{expenseData.remainingAmount.toFixed(2)}</p>
                 </div>
-                <div className="money-icon">
+                <div className='money-icon'>
                   <MoneySvg />
                 </div>
               </div>
@@ -177,23 +140,17 @@ const CalculateTheSpends = ({
           groupedTransactions[selectedMonth] &&
           groupedTransactions[selectedMonth][selectedDay] && (
             <div>
-              <div className="card p-2 mb-3">
-                <h6 className="m-0 p-2">{`${selectedMonth}, ${selectedDay}`}</h6>
+              <div className='card p-2 mb-3 card-height-small-screen'>
+                <h6 className='m-0 p-2'>{`${selectedMonth}, ${selectedDay}`}</h6>
               </div>
-              <div
-                className="table-responsive"
-                style={{
-                  height: "34.55em",
-                  scrollbarWidth: "thin",
-                }}
-              >
-                <table className="table table-bordered table-hover">
-                  <thead className="thead-light sticky-top">
+              <div className='table-responsive expense-table'>
+                <table className='table table-bordered table-hover'>
+                  <thead className='thead-light sticky-top'>
                     <tr>
-                      <th className="text-center">Title</th>
-                      <th className="text-center">Amount</th>
-                      <th className="text-center">Action</th>
-                      <th className="text-center">Type</th>
+                      <th className='text-center'>Title</th>
+                      <th className='text-center'>Amount</th>
+                      <th className='text-center'>Action</th>
+                      <th className='text-center'>Type</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -201,24 +158,24 @@ const CalculateTheSpends = ({
                       (transaction) => (
                         <tr key={transaction._id}>
                           <td
-                            className="text-center text-truncate"
+                            className='text-center text-truncate'
                             style={{ maxWidth: "100px" }}
                             title={transaction.title}
                           >
                             {transaction.title}
                           </td>
-                          <td className="text-center">
+                          <td className='text-center'>
                             ₹{transaction.amount.toFixed(2)}
                           </td>
-                          <td className="text-center">
+                          <td className='text-center'>
                             <button
-                              className="btn btn-danger"
+                              className='btn btn-danger'
                               onClick={() => onDeleteExpense(transaction._id)}
                             >
                               <DeleteSvg />
                             </button>
                           </td>
-                          <td className="text-center align-content-center">
+                          <td className='text-center align-content-center'>
                             <span
                               className={`badge ${
                                 transaction.type === "spent"
@@ -249,12 +206,11 @@ CalculateTheSpends.propTypes = {
     PropTypes.shape({
       transactions: PropTypes.arrayOf(
         PropTypes.shape({
-          _id: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
-            .isRequired,
-          title: PropTypes.string.isRequired,
-          amount: PropTypes.number.isRequired,
-          type: PropTypes.oneOf(["spent", "credited"]).isRequired,
-          user: PropTypes.string.isRequired,
+          _id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+          title: PropTypes.string,
+          amount: PropTypes.number,
+          type: PropTypes.oneOf(["spent", "credited"]),
+          user: PropTypes.string,
           createdAt: PropTypes.string.isRequired,
         })
       ).isRequired,
@@ -264,7 +220,7 @@ CalculateTheSpends.propTypes = {
     })
   ).isRequired,
   onDeleteExpense: PropTypes.func.isRequired,
-  getData: PropTypes.func.isRequired,
+  getData: PropTypes.func,
 };
 
-export default CalculateTheSpends;
+export default React.memo(CalculateTheSpends);

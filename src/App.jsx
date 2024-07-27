@@ -14,10 +14,15 @@ function App() {
             (route) =>
               route.isNav && (
                 <Route
+                  index={route.path === "/reactapphost/"}
                   key={route.id}
                   path={route.path}
                   element={
-                    <Protect Component={route.Component} name={route.name} isProtected={route.isProtected} />
+                    <Protect
+                      Component={route.Component}
+                      name={route.name}
+                      isProtected={route.isProtected}
+                    />
                   }
                 />
               )
@@ -31,7 +36,12 @@ function App() {
                 key={route.id}
                 path={route.path}
                 element={
-                  <Protect Component={route.Component} name={route.name} isProtected={route.isProtected} />}
+                  <Protect
+                    Component={route.Component}
+                    name={route.name}
+                    isProtected={route.isProtected}
+                  />
+                }
               />
             )
         )}
