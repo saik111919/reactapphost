@@ -15,6 +15,10 @@ const ProfileImage = ({ image, onImageChange }) => {
           className='img-thumbnail rounded-circle object-fit-cover'
           width='150'
           height='150'
+          style={{
+            width: "150px",
+            height: "150px",
+          }}
           onError={handleImageError}
         />
       </div>
