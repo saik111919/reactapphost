@@ -1,141 +1,52 @@
 import PropTypes from "prop-types";
-import { useForm } from "react-hook-form";
-import { AddTransactions } from "../../Api/Service";
-import {useToast} from "../../Plugins/Toast/ToastContext"
+import { CgAdd } from "react-icons/cg";
+// import ExpenseModal from "./ExpenseModal";
+import { useState } from "react";
+import DataTable from "./DataTable";
+import ExpenseModal from "./ExpenseModal";
 
-const ExpenseForm = ({ getData }) => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    reset,
-  } = useForm();
-  const addToast = useToast()
+const ExpenseForm = ({ data, onDeleteExpense, fetchTransactions }) => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const tags = [
-    { value: "spent", label: "Amount Spent" },
-    { value: "credited", label: "Amount Credited" },
-  ];
+  const handleOpenModal = () => {
+    setIsModalOpen(true);
+  };
 
-  const onSubmit = (data) => {
-    reset();
-    AddTransactions(data)
-      .then(({data}) => {
-        getData();
-        addToast('success', data.message, 5000)
-      })
-      .catch((err) => {
-        addToast('error', err?.data?.message|| "Somthing went wrong.", 5000)
-      });
+  const handleCloseModal = (state) => {
+    setIsModalOpen(false);
+    if (state) {
+      fetchTransactions();
+    }
   };
 
   return (
-    <div className='card shadow-sm mt-3 mb-1 p-2'>
-      <div className='accordion' id='expenseFormAccordion'>
-        <div className='accordion-item'>
-          <h2 className='accordion-header' id='headingOne'>
-            <button
-              className='accordion-button collapsed'
-              type='button'
-              data-bs-toggle='collapse'
-              data-bs-target='#collapseOne'
-              aria-expanded='false'
-              aria-controls='collapseOne'
-            >
-              Add Expenses
-            </button>
-          </h2>
-          <div
-            id='collapseOne'
-            className='accordion-collapse collapse'
-            aria-labelledby='headingOne'
-            data-bs-parent='#expenseFormAccordion'
+    <div className='card mt-2 rounded-lg border-2'>
+      <div className='card-header rounded-t-lg  border-b-2 p-0'>
+        <div className='flex justify-between'>
+          <span className='text-lg self-center p-2'>Add Expense</span>
+          <button
+            className='p-3 shadow py-1 btn btn-outline-primary rounded-start-0 rounded-bottom-0'
+            type='button'
+            onClick={handleOpenModal}
           >
-            <div className='accordion-body'>
-              <form onSubmit={handleSubmit(onSubmit)}>
-                <div className='row'>
-                  <div className='col-md-6 mb-3'>
-                    <label htmlFor='title' className='form-label'>
-                      Title
-                    </label>
-                    <input
-                      id='title'
-                      type='text'
-                      className={`form-control ${
-                        errors.title ? "is-invalid" : ""
-                      }`}
-                      {...register("title", { required: "Title is required" })}
-                    />
-                    {errors.title && (
-                      <div className='invalid-feedback'>
-                        {errors.title.message}
-                      </div>
-                    )}
-                  </div>
-                  <div className='col-md-6 mb-3'>
-                    <label htmlFor='amount' className='form-label'>
-                      Amount
-                    </label>
-                    <input
-                      id='amount'
-                      type='number'
-                      className={`form-control ${
-                        errors.amount ? "is-invalid" : ""
-                      }`}
-                      {...register("amount", {
-                        required: "Amount is required",
-                        valueAsNumber: true,
-                        validate: (value) =>
-                          value > 0 || "Amount must be greater than 0",
-                      })}
-                    />
-                    {errors.amount && (
-                      <div className='invalid-feedback'>
-                        {errors.amount.message}
-                      </div>
-                    )}
-                  </div>
-                  <div className='col-md-6 mb-3'>
-                    <label htmlFor='type' className='form-label'>
-                      Type
-                    </label>
-                    <select
-                      id='type'
-                      className={`form-select ${
-                        errors.type ? "is-invalid" : ""
-                      }`}
-                      {...register("type", { required: "Type is required" })}
-                    >
-                      <option value=''>Select type...</option>
-                      {tags.map((tag) => (
-                        <option key={tag.value} value={tag.value}>
-                          {tag.label}
-                        </option>
-                      ))}
-                    </select>
-                    {errors.type && (
-                      <div className='invalid-feedback'>
-                        {errors.type.message}
-                      </div>
-                    )}
-                  </div>
-                  <div className='col-12 mb-3'>
-                    <button type='submit' className='btn btn-primary w-100'>
-                      Add Expense
-                    </button>
-                  </div>
-                </div>
-              </form>
+            <div className='flex align-middle gap-2 text-inherit lg:p-3 p-2'>
+              <CgAdd className='self-center' /> Add Expense
             </div>
-          </div>
+          </button>
         </div>
+      </div>
+      <div className='card-body p-0'>
+        {isModalOpen && <ExpenseModal onClose={handleCloseModal} />}
+        <DataTable data={data} onDeleteExpense={onDeleteExpense} />
       </div>
     </div>
   );
 };
 
 ExpenseForm.propTypes = {
-  getData: PropTypes.func.isRequired,
+  data: PropTypes.arrayOf(PropTypes.object).isRequired,
+  onDeleteExpense: PropTypes.func.isRequired,
+  fetchTransactions: PropTypes.func.isRequired,
 };
 
 export default ExpenseForm;

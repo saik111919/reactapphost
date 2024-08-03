@@ -1,0 +1,10 @@
+/* Ensure the main content doesn't overlap with the navbar on small screens */
+@media (max-width: 767.98px) {
+  main {
+    margin-bottom: 56px; /* Adjust based on the height of the navbar */
+  }
+}
+
+* {
+  scrollbar-width: thin;
+}
