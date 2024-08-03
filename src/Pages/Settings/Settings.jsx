@@ -7,12 +7,16 @@ import { useNavigate } from "react-router-dom";
 const Settings = () => {
   const [theme, toggleTheme] = useTheme();
   const navigate = useNavigate();
+  const name = localStorage.getItem("name");
 
   return (
     <div className='-m-1'>
       <div className='flex flex-col justify-between'>
         <div className='w-full p-4 flex justify-between shadow-sm'>
           <h1 className='text-2xl font-mono'>Settings</h1>
+          <span className='text-2xl font-mono'>
+            {name ? name : "Default Name"}
+          </span>
           <FiSettings className='h-7 w-7 transition-transform duration-300 ease-in-out transform hover:rotate-180 hover:text-blue-500' />
         </div>
         <div

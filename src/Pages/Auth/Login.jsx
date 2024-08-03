@@ -25,6 +25,7 @@ const Login = () => {
       .then(({ data }) => {
         addToast("success", data.message, 5000);
         localStorage.setItem("token", data.token);
+        localStorage.setItem("name", data.name);
         navigate("/reactapphost/");
       })
       .catch((err) => {
