@@ -2,9 +2,11 @@ import { FaMoon, FaSun } from "react-icons/fa";
 import useTheme from "../../hooks/useTheme";
 import Logout from "../../plugin/Logout";
 import { FiSettings } from "react-icons/fi";
+import { useNavigate } from "react-router-dom";
 
 const Settings = () => {
   const [theme, toggleTheme] = useTheme();
+  const navigate = useNavigate();
 
   return (
     <div className='-m-1'>
@@ -29,7 +31,14 @@ const Settings = () => {
           </div>
         </div>
         <div className='absolute bottom-16 w-full'>
-          <Logout tag='button' className='bg-danger p-3 text-light w-full' />
+          <Logout
+            tag='button'
+            className='bg-danger p-3 text-light w-full'
+            onClick={() => {
+              localStorage.clear();
+              navigate("/reactapphost/login");
+            }}
+          />
         </div>
       </div>
     </div>
