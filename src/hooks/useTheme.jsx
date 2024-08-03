@@ -1,19 +1,22 @@
 import { useEffect, useState } from "react";
 
 const useTheme = () => {
-  const getTheme = localStorage.getItem("theme");
-  const [theme, setTheme] = useState(getTheme ? getTheme : "dark");
+  // Get the saved theme from localStorage or default to "dark"
+  const getTheme = () => localStorage.getItem("theme") || "dark";
+  const [theme, setTheme] = useState(getTheme());
 
+  // Apply the theme to the body element
   const applyTheme = (theme) => {
     localStorage.setItem("theme", theme);
-    const body = document.querySelector("body");
-    body.setAttribute("data-bs-theme", theme); // Set the data-bs-theme attribute
+    document.body.setAttribute("data-bs-theme", theme);
   };
 
+  // Toggle between dark and light themes
   const toggleTheme = () => {
     setTheme((prevTheme) => (prevTheme === "dark" ? "light" : "dark"));
   };
 
+  // Effect to apply the theme whenever it changes
   useEffect(() => {
     applyTheme(theme);
   }, [theme]);
