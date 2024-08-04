@@ -123,19 +123,24 @@ const Signup = () => {
                   {confirmPasswordError?.message}
                 </p>
               )}
-              <div className='flex gap-2'>
-                <Link
-                  to={"/reactapphost/login"}
-                  className='btn btn-outline-secondary flex-1 rounded-lg hover:bg-gray-700'
-                >
-                  Login
-                </Link>
+              <div className='flex flex-col gap-2'>
                 <button
                   type='submit'
-                  className='btn btn-primary flex-1 rounded-lg hover:bg-blue-700'
+                  className='btn btn-primary w-full rounded-md p-3 hover:bg-blue-700 transition duration-200'
                 >
                   Signup
                 </button>
+                <div className='relative flex items-center my-2'>
+                  <div className='flex-grow border-t border-gray-300'></div>
+                  <span className='flex-shrink mx-4 text-gray-500'>or</span>
+                  <div className='flex-grow border-t border-gray-300'></div>
+                </div>
+                <Link
+                  to={"/reactapphost/login"}
+                  className='link-arrow text-center w-full text-blue-500 hover:text-blue-700 underline transition duration-200'
+                >
+                  Back to Login.
+                </Link>
               </div>
             </form>
           </div>

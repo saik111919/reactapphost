@@ -1,0 +1,20 @@
+/* Add this to your CSS file */
+
+.link-arrow {
+  position: relative;
+  display: inline-block;
+  transition: all 0.3s ease;
+}
+
+.link-arrow::after {
+  content: "→";
+  position: absolute;
+  opacity: 0;
+  transform: translateX(-10px);
+  transition: all 0.3s ease;
+}
+
+.link-arrow:hover::after {
+  opacity: 1;
+  transform: translateX(5px);
+}
