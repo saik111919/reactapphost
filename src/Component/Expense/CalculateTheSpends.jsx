@@ -229,4 +229,4 @@ CalculateTheSpends.propTypes = {
   getData: PropTypes.func,
 };
 
-export default React.memo(CalculateTheSpends);
+export default CalculateTheSpends;
